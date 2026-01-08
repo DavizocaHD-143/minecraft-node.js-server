@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 // --- CONFIGURAÇÃO ---
-const SENHA_MESTRA = "MUDE_ISSO_PARA_SUA_SENHA"; 
+const SENHA_MESTRA = "password"; 
 const PORTA_WEB = 8080; // Porta padrão que a Koyeb prefere
 
 // Servidor Web para manter a Koyeb feliz
