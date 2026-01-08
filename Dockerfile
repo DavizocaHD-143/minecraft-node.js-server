@@ -1,22 +1,30 @@
 FROM node:18-slim
 
-# Instala ferramentas básicas
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+# 1. Instala ferramentas de sistema e compiladores C++ necessários para o raknet-native
+RUN apt-get update && apt-get install -y \
+    curl \
+    python3 \
+    make \
+    g++ \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
-# Instala o Playit Agent
+# 2. Instala o Playit Agent
 RUN curl -Lo /usr/local/bin/playit https://github.com/playit-cloud/playit-agent/releases/latest/download/playit-linux-amd64 && \
     chmod +x /usr/local/bin/playit
 
 WORKDIR /app
 
-# Instala dependências antes de copiar o código (gera cache e fica mais rápido)
+# 3. Copia apenas o package.json primeiro
 COPY package.json .
+
+# 4. Instala as dependências (agora com g++ disponível para compilar o raknet)
 RUN npm install --no-audit --no-fund
 
-# Copia o código e define as permissões
+# 5. Copia o resto dos arquivos
 COPY . .
 
-# Expõe a porta Web (Koyeb) e a porta do Minecraft
+# Expõe as portas
 EXPOSE 8080
 EXPOSE 19132
 
